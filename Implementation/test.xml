@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<FileName name="file1">
+<Node Version ="1">
+<Parent>Parent1</Parent>
+<Children>
+<Child>Child1</Child>
+<Child>Child2</Child>
+</Children>
+<Name>Sample Name</Name>
+</Node>
+<Node Version ="2">
+<Parent>Parent2</Parent>
+<Children>
+<Child>3</Child>
+<Child>4</Child>
+</Children>
+<Name>Sample Name 2</Name>
+</Node>
+</FileName>

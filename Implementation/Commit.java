@@ -12,10 +12,16 @@ public class Commit {
        if (currFile.getChildren().size() !=0 ) {
            branch(reviTree, currFile);
        }
+       // need more 
    }
+
+
+   // suppose that Node's element is its revision number
 
    public void branch(DAG reviTree, Node currFile) {
-       //currFile.revisionNumber.setNextRN();
+       // currFile.setNextReviNum();
+       // Float reviNum = currFile.getNextReviNum();
+       // Node copy = new Node(reviNum, currFile);
+       // currFile.addChild(copy);
    }
-
 }

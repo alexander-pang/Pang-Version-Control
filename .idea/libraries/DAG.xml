@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="DAG">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/DAG" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/DAG/src" />
+    </SOURCES>
+  </library>
+</component>

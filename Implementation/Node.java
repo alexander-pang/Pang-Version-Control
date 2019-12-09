@@ -4,17 +4,21 @@ public class Node<T extends Comparable<T>> {
     private T elem;
     private ArrayList<Node<T>> children;
     private Node<T> parent;
+    private Boolean isBranch;
 
     public Node() {
         this.elem = null;
         this.children = new ArrayList<>();
         this.parent = null;
+        this.isBranch = false;
     }
 
     public Node(T elem, Node<T> parent) {
         this.elem = elem;
         this.children = new ArrayList<>();
         this.parent = parent;
+        this.isBranch = false;
+
     }
 
     ///// DO NOT EDIT THE ABOVE.
@@ -24,6 +28,8 @@ public class Node<T extends Comparable<T>> {
         this.elem = n.getElem();
         this.children = n.getChildren();
         this.parent = n.getParent();
+        this.isBranch = n.getIsBranch();
+
     }
 
     public ArrayList<Node<T>> getChildren() {
@@ -40,6 +46,9 @@ public class Node<T extends Comparable<T>> {
     public T getElem(){
         return this.elem;
     }
+
+    public Boolean getIsBranch(){return this.isBranch;}
+    public void setIsBranch(Boolean isBranch){this.isBranch = isBranch;}
 
     public void newChild(T new_Data){
         Node<T> new_Node = new Node<>(new_Data, this);

@@ -3,38 +3,55 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.Iterator;
-import javax.xml.namespace.QName;
+//import java.util.Iterator;
+//import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
 
-public class stax_parser
-{
+public class stax_parser {
 
-    private static boolean fileName,node,parent,children,name;
+    private static boolean fileName, node, parent, child, children;
+    private String data, file, version;
+    private String cur_Par,cur_Ver = "";
 
-    public static void main(String[] args) throws FileNotFoundException,
-            XMLStreamException
-    {
-        // Create a File object with appropriate xml file name
-        //System.out.println("Working Directory = " + System.getProperty("user.dir"));
-        File file = new File("./Implementation/test.xml");
-
+    public stax_parser(String name) throws FileNotFoundException, XMLStreamException {
+        //System.out.println("VERSION: " + version);
         // Function for accessing the data
-        parser(file);
+        this.data = "";
+        this.setFile(name);
+
     }
 
-    public static void parser(File file) throws FileNotFoundException,
-            XMLStreamException
-    {
+    public static void main(String[] args) throws FileNotFoundException, XMLStreamException {
+        stax_parser p = new stax_parser("file1.txt");
+        System.out.println("FINAL RESULT: \n" + p.getData());
+    }
+
+    public String getData() {
+        return this.data;
+    }
+    public void setData(String d) {
+        this.data = d;
+    }
+    public void addData(String s){this.data += s + "\n";}
+
+    public String getFile(){return this.file;}
+    public void setFile(String name){this.file = name;}
+
+    public String getVersion(){return this.version;}
+    public void setVersion(String name){this.version = name;}
+
+    public DAG parser(File file, String name) throws FileNotFoundException, XMLStreamException {
+        DAG<String> D = new DAG<>();
+        D.add(null, "1.1");
         // Variables to make sure whether a element
         // in the xml is being accessed or not
         // if false that means elements is
         // not been used currently , if true the element or the
         // tag is being used currently
-        fileName = node = parent = children = name = false;
+        fileName = node = parent = child = children = false;
 
         // Instance of the class which helps on reading tags
         XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -44,8 +61,7 @@ public class stax_parser
                 factory.createXMLEventReader(new FileReader(file));
 
         // Checking the availabilty of the next tag
-        while (eventReader.hasNext())
-        {
+        while (eventReader.hasNext()) {
             // Event is actually the tag . It is of 3 types
             // <name> = StartEvent
             // </name> = EndEvent
@@ -54,104 +70,145 @@ public class stax_parser
             XMLEvent event = eventReader.nextEvent();
 
             // This will trigger when the tag is of type <...>
-            if (event.isStartElement())
-            {
-                StartElement element = (StartElement)event;
+            if (event.isStartElement()) {
+                StartElement element = (StartElement) event;
 
                 // Iterator for accessing the metadeta related
                 // the tag started.
                 // Here, it would name of the company
-                Iterator<Attribute> iterator = element.getAttributes();
+                /*Iterator<Attribute> iterator = element.getAttributes();
+                //System.out.println("Starting a new interator!");
                 while (iterator.hasNext())
                 {
                     Attribute attribute = iterator.next();
-                    QName name = attribute.getName();
+                    QName n = attribute.getName();
                     String value = attribute.getValue();
-                    System.out.println(name+" = " + value);
-                }
+                    System.out.println(n+" = " + value);
+                    if (value.equals(name)){
+                        System.out.println("HEY! I FOUND " + value);
+                    }
+                }*/
 
                 // Checking which tag needs to be opened for reading.
                 // If the tag matches then the boolean of that tag
                 // is set to be true.
-                if (element.getName().toString().equalsIgnoreCase("fileName"))
-                {
-                    fileName = true;
+
+                if (!element.getName().toString().equalsIgnoreCase("start") && element.getAttributes().hasNext()) {
+                    String attribute = element.getAttributes().next().getValue();
+                    if (element.getName().toString().equalsIgnoreCase("FileName") && attribute.equals(name)) {
+                        System.out.println("Start of file: " + attribute);
+                        //System.out.println(element);
+                        this.addData("File: " + attribute);
+                        fileName = true;
+                    }
+                    if (element.getName().toString().equalsIgnoreCase("Node") && fileName) {
+                        System.out.println("Start of version: " + attribute);
+                        //this.setVersion(attribute);
+                        this.addData("Version: " + attribute);
+                        cur_Par = cur_Ver = null;
+                        cur_Ver = attribute;
+                        System.out.println("Attribute: " + attribute);
+                        System.out.println(cur_Ver + cur_Par);
+                        node = true;
+                    }
                 }
-                if (element.getName().toString().equalsIgnoreCase("node"))
-                {
-                    node = true;
-                }
-                if (element.getName().toString().equalsIgnoreCase("parent"))
-                {
+                if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
+                    System.out.println("Start of parent:");
                     parent = true;
                 }
-                if (element.getName().toString().equalsIgnoreCase("children"))
-                {
+                if (element.getName().toString().equalsIgnoreCase("Children") && fileName) {
+                    System.out.println("Start of children:");
                     children = true;
                 }
-                if (element.getName().toString().equalsIgnoreCase("name"))
-                {
-                    name = true;
+                if (element.getName().toString().equalsIgnoreCase("Child") && fileName) {
+                    System.out.println("Start of child:");
+                    child = true;
                 }
+
             }
 
             // This will be triggered when the tag is of type </...>
-            if (event.isEndElement())
-            {
+            if (event.isEndElement()) {
                 EndElement element = (EndElement) event;
 
                 // Checking which tag needs to be closed after reading.
                 // If the tag matches then the boolean of that tag is
                 // set to be false.
-                if (element.getName().toString().equalsIgnoreCase("fileName"))
-                {
+                if (element.getName().toString().equalsIgnoreCase("FileName") && fileName) {
+                    System.out.println("End of file: " + element.getName());
                     fileName = false;
                 }
-                if (element.getName().toString().equalsIgnoreCase("node"))
-                {
+                if (element.getName().toString().equalsIgnoreCase("Node") && fileName) {
+                    System.out.println("End of version: " + element.getName());
                     node = false;
+                    // If end of a version, add the node created to our DAG
+                    System.out.println(cur_Ver + cur_Par);
+                    //System.out.println("THIS IS CUR_PAR: " + cur_Par + ": " + cur_Par.getClass());
+                    if(cur_Ver.equals("1.1")){
+                        D.add(null, cur_Ver);
+                    } else D.add(cur_Par, cur_Ver);
                 }
-                if (element.getName().toString().equalsIgnoreCase("parent"))
-                {
+                if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
+                    System.out.println("End of parent:");
                     parent = false;
                 }
-                if (element.getName().toString().equalsIgnoreCase("children"))
-                {
+                if (element.getName().toString().equalsIgnoreCase("Children") && fileName) {
+                    System.out.println("End of children:");
                     children = false;
                 }
-                if (element.getName().toString().equalsIgnoreCase("name"))
-                {
-                    name = false;
+                if (element.getName().toString().equalsIgnoreCase("Child") && fileName) {
+                    System.out.println("End of child:");
+                    child = false;
                 }
             }
 
             // Triggered when there is data after the tag which is
             // currently opened.
-            if (event.isCharacters())
-            {
+            if (event.isCharacters()) {
                 // Depending upon the tag opened the data is retrieved .
                 Characters element = (Characters) event;
-                if (fileName)
-                {
-                    System.out.println(element.getData());
-                }
-                if (node)
-                {
-                    System.out.println(element.getData());
-                }
-                if (parent)
-                {
-                    System.out.println(element.getData());
-                }
-                if (children)
-                {
-                    System.out.println(element.getData());
-                }
-                if (name)
-                {
-                    System.out.println(element.getData());
+                if (fileName) {
+                    if (child) {
+                        if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                            System.out.println("\tCHILD!!!!*******" + element.getData() + "*******");
+                            this.addData("Child: " + element.getData());
+                            //return;
+                        }
+                    } else {
+                        if (parent) {
+                            if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                                System.out.println("\tPARENT!!!!***" + element.getData() + "***");
+                                this.addData("Parent: " + element.getData());
+                                // Add the parent to our tracking
+                                cur_Par = element.getData();
+                                System.out.println(cur_Ver + cur_Par);
+                                //return;
+                            }
+                        } /*else if (children) {
+                            if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                                System.out.println("\tCHILDREN!!!!*****" + element.getData() + "*****");
+                                this.addData(element.getData());
+                                //return;
+                            }
+                        } else if (node) {
+                            if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                                System.out.println("\tVERSION!!**" + element.getData() + "**");
+                                //System.out.println(element.getData().trim().equals(""));
+                                this.addData("Version: " + element.getData());
+                                //return;
+                            }
+                        } else {
+                            // This is the actual patch information
+                            if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                                System.out.println("\tFILE!!!!*" + element.getData() + "*");
+                                this.addData("File: : " + element.getData());
+                                //return;
+                            }
+                        }*/
+                    }
                 }
             }
         }
+        return D;
     }
 }

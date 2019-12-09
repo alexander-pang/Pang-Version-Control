@@ -1,0 +1,8 @@
+--- temp.txt	2019-12-08 17:53:54.000000000 -0600
++++ temp2.txt	2019-12-08 17:53:54.000000000 -0600
+@@ -1 +1,2 @@
+-krejerjklejklejklegjkl
+\ No newline at end of file
++This is the latest version of the file
++What do you want to do about it?
+\ No newline at end of file

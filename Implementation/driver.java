@@ -35,12 +35,14 @@ public class driver {
     }
 
     public void makeDag(String[] args) throws FileNotFoundException, XMLStreamException {
-        File file = new File(args[1]);
-        boolean exists = file.exists();
-        stax_parser sp = new stax_parser(args[1]);
+        //File file = new File(args[1]);
         String root = args[1].split("\\.")[0];
         File xmlFile = new File(root + ".xml");
-        this.D = sp.parser(xmlFile, args[1]);
+        if (xmlFile.exists()) {
+            stax_parser sp = new stax_parser(args[1]);
+            this.D = sp.parser(xmlFile, args[1]);
+        }
+        else this.D = new DAG<>();
     }
 
     public void drive(String[] args) throws InterruptedException, XMLStreamException, IOException {

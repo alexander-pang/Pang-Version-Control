@@ -27,7 +27,7 @@ public class checkout {
     }*/
 
     public boolean validate(){return this.point.getElem() != version;}
-    public void generate() throws IOException, XMLStreamException, InterruptedException {
+    public void generate() throws IOException, XMLStreamException {
         System.out.println("Working Directory = " + System.getProperty("user.dir"));
         //Runtime.getRuntime().exec("cp " + fileName + "_last.txt " + "temp.txt").waitFor();
         File source = new File(fileName.split("\\.")[0] + "_last.txt");
@@ -91,7 +91,19 @@ public class checkout {
                     System.out.println("Running patch now on temp.txt...");
                     Runtime.getRuntime().exec("patch temp.txt current.patch").waitFor();
                     //Runtime.getRuntime().exec("diff -u " + newer + older > destinationFile);
-                    point = point.getParent();
+                    if (point.getChildren().size() > 1){
+                        for (Object ch : point.getChildren()){
+                            Node child = (Node)ch;
+                            if (D.DFS(version, point)!=null){
+                                point = child;
+                                return;
+                            }
+                        }
+                        point = point.getParent();
+                    }else if (point.getElem().toString().split("\\.").length > 2 && point.getChildren().size() > 1){
+                        point = (Node)point.getChildren().get(0);
+                    }else point = point.getParent();
+
                 }catch(Exception e){System.out.println(e);}
 
                 System.out.println("Successful patch writes...");

@@ -10,7 +10,6 @@ public class driver {
 
     public driver(String[] args) throws FileNotFoundException, XMLStreamException {
         makeDag(args);
-
     }
 
     public DAG<String> getDag() {
@@ -86,50 +85,70 @@ public class driver {
 
     public void commit(String[] args) throws IOException, XMLStreamException, InterruptedException {
 
-        // copy diff and store -- diff file between current and input file
-        // driver should have these stuff??? (current file and new file)
-        // diffFlie from current and new file that has some new changes
-        //System.out.println("running it");
-        String filename = args[1];
-        String version = this.D.calcVersion(D.find(currentVersion));
-        checkout c = new checkout(D, filename, currentVersion);
-        c.generate();
-        File source = new File("temp.txt");
-        File dest = new File("temp2.txt");
-        FileChannel sourceChannel = null;
-        FileChannel destChannel = null;
-        try {
-            sourceChannel = new FileInputStream(source).getChannel();
-            destChannel = new FileOutputStream(dest).getChannel();
-            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        } finally {
-            sourceChannel.close();
-            destChannel.close();
-        }
-        source = new File(filename);
-        dest = new File("temp.txt");
-        sourceChannel = null;
-        destChannel = null;
-        try {
-            sourceChannel = new FileInputStream(source).getChannel();
-            destChannel = new FileOutputStream(dest).getChannel();
-            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        } finally {
-            sourceChannel.close();
-            destChannel.close();
-        }
-        //this.setCurrentVersion(version);
-        Runtime.getRuntime().exec("diff -u temp.txt temp2.txt > current.patch");
+        if (currentVersion.split("\\.").length != 2) { // if it is not in main branch
+            // Just diff temp and file
+            String filename = args[1];
+            String version = this.D.calcVersion(D.find(currentVersion));
+            checkout c = new checkout(D, filename, currentVersion);
+            c.generate();
+            Runtime.getRuntime().exec("diff -u temp.txt " + filename + " > current.patch");
+            write(version, filename);
+            D.add(this.currentVersion, version);
+            this.setCurrentVersion(version);
 
-        write(version, filename);
-        D.add(this.currentVersion, version);
-        this.setCurrentVersion(version);
+        } else {
+            // System.out.println("running it");
+            String filename = args[1];
+            String version = this.D.calcVersion(D.find(currentVersion));
+            checkout c = new checkout(D, filename, currentVersion);
+            c.generate();
+            File source = new File("temp.txt");
+            File dest = new File("temp2.txt");
+            FileChannel sourceChannel = null;
+            FileChannel destChannel = null;
+            try {
+                sourceChannel = new FileInputStream(source).getChannel();
+                destChannel = new FileOutputStream(dest).getChannel();
+                destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            } finally {
+                sourceChannel.close();
+                destChannel.close();
+            }
+            source = new File(filename);
+            dest = new File("temp.txt");
+            sourceChannel = null;
+            destChannel = null;
+            try {
+                sourceChannel = new FileInputStream(source).getChannel();
+                destChannel = new FileOutputStream(dest).getChannel();
+                destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            } finally {
+                sourceChannel.close();
+                destChannel.close();
+            }
+            //this.setCurrentVersion(version);
+            Runtime.getRuntime().exec("diff -u temp.txt temp2.txt > current.patch");
+            write(version, filename);
+            D.add(this.currentVersion, version);
+            this.setCurrentVersion(version);
+        }
     }
 
     public void write(String version, String fileName) throws IOException {
-        //File f = new File(".file.txt");
+        File q = new File(fileName);
         //Node cur = this.getDag().getSentinel();
         //f.delete();
+
+        if (q.exists()){
+            FileWriter fw = new FileWriter(fileName.split("\\.")[0] + ".xml", true); // true for appending option
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            pw.println("<?xml version=\"1.0\"?>");
+            pw.println("<FileName name=\"" + fileName + "\">");
+            pw.println("</FileName>");
+            pw.close();
+        }
+
         BufferedReader br = new BufferedReader(new FileReader("."+fileName));
         String data = "";
         ArrayList<String> L = new ArrayList<>();

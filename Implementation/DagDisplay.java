@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,9 +24,9 @@ public class DagDisplay<T extends Comparable<T>> extends JFrame implements Mouse
     private LinkedList<DebugStep<T>> debugSteps = new LinkedList<>();
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         //Construct DAG and add test data
-        DAG<Integer> test = new DAG<>();
+        DAG<Integer> test = new DAG<>("asflkjh");
         test.add(null, 10);
         test.add(10, 9);
         test.add(10, 8);

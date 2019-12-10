@@ -1,3 +1,5 @@
+import java.io.*;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -5,13 +7,19 @@ import java.util.Set;
 public class DAG<T extends Comparable<T>> {
     private Node<T> sentinel;
     public Node<T> tail;
-    public DAG() {
+    private String fileName;
+    public String currentVersion;
+    public DAG(String fileName) {
         this.sentinel = new Node<>();
         this.tail = sentinel;
+        this.fileName = fileName;
+        this.currentVersion = null;
     }
 
     public Node<T> getTail() { return this.tail; }
-    public void setTail(Node<T> node) { this.tail = node; }
+    public void setTail(Node<T> node) throws IOException {
+        this.tail = node;
+    }
 
     public Node<T> getSentinel(){
         return this.sentinel;
@@ -39,7 +47,7 @@ public class DAG<T extends Comparable<T>> {
     }
 
 
-    public void add(T parent , T newVersion) {
+    public void add(T parent , T newVersion) throws IOException {
         if (!newVersion.equals(parent)) {
             if (parent == null) {
                 if (search(newVersion)) {
@@ -66,6 +74,9 @@ public class DAG<T extends Comparable<T>> {
                 }
             }
             print(find(newVersion));
+            if (find(parent) != null && find(parent).getChildren().size() > 1){
+                find(newVersion).setIsBranch(true);
+            }
         }
     }
     public String calcVersion(Node<T> current){
@@ -101,9 +112,6 @@ public class DAG<T extends Comparable<T>> {
             }else{
                 String s = (String)current.getElem();
                 String version = s + ".1";
-                ArrayList<Node<T>> childs = current.getChildren();
-                Node mostCurChild = childs.get(childs.size() - 1);
-                mostCurChild.setIsBranch(true);
                 return version;
             }
         }else if(current.getChildren().size() > 1){
@@ -258,7 +266,7 @@ public class DAG<T extends Comparable<T>> {
     ///////////////////////////////////////////////////////////////////////////////
 
 
-    public static void main(String [] args){
+   /* public static void main(String [] args){
         DAG d = new DAG();
         d.add(null, "1.2");
         d.add("1.2","1.3");
@@ -290,7 +298,7 @@ public class DAG<T extends Comparable<T>> {
         //d.remove(6);
         //d.printGraphEdges();
 
-       /*  DAG d = new DAG();
+       *//*  DAG d = new DAG();
         d.add(null, 5);
         //d.add(null, 5);
         // d.add(null, "Dog");
@@ -298,13 +306,13 @@ public class DAG<T extends Comparable<T>> {
         d.add(5, 4);
         d.add(4, 6);
         d.printGraphEdges();
-        */
+        *//*
         //   d.add(5, "Cat");
         //System.out.println(d.find(5).getChildren());
         //d.print_children(5);
         //d.printFirstLevel();
         //   d.remove(6);
         //d.printFirstLevel();
-    }
+    }*/
 }
 

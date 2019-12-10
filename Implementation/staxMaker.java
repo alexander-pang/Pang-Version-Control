@@ -4,7 +4,7 @@ public class staxMaker {
     private String file;
     private DAG D;
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         DAG<String> D = new DAG<>();
         D.add(D.getSentinel().getElem(),"1.1");
         D.add("1.1", "1.2");
@@ -12,7 +12,7 @@ public class staxMaker {
         D.add("1.2","1.2.1");
         staxMaker s = new staxMaker("test", D);
         s.write();
-    }
+    }*/
 
     public staxMaker(String file, DAG D) throws IOException {
         this.file = file;
@@ -52,6 +52,7 @@ public class staxMaker {
         PrintWriter pw = new PrintWriter(bw);
         pw.println("<?xml version=\"1.0\"?>");
         pw.println("<FileName name=\"" + this.file + "\">");
+        pw.println("<current Version=\"" + this.D.currentVersion + "\"></current>");
         pw.close();
         bw.close();
         fw.close();

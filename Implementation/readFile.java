@@ -2,7 +2,7 @@
 import java.io.*;
 
 public class readFile {
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 
 		File file = new File("c.txt");
 
@@ -25,5 +25,5 @@ public class readFile {
 			for (int i = 0; i < tokensVal.length; i++)
 				System.out.println(tokensVal[i]);
 		}
-	}
+	}*/
 }

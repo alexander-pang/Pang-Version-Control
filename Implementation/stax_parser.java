@@ -3,6 +3,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 //import java.util.Iterator;
 //import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -12,7 +13,7 @@ import javax.xml.stream.events.*;
 
 public class stax_parser {
 
-    private static boolean fileName, node, parent, child, children;
+    private static boolean fileName, current, node, parent, child, children;
     private String data, file, version;
     private String cur_Par,cur_Ver = "";
 
@@ -24,10 +25,10 @@ public class stax_parser {
 
     }
 
-    public static void main(String[] args) throws FileNotFoundException, XMLStreamException {
+    /*public static void main(String[] args) throws FileNotFoundException, XMLStreamException {
         stax_parser p = new stax_parser("file1.txt");
         System.out.println("FINAL RESULT: \n" + p.getData());
-    }
+    }*/
 
     public String getData() {
         return this.data;
@@ -43,15 +44,15 @@ public class stax_parser {
     public String getVersion(){return this.version;}
     public void setVersion(String name){this.version = name;}
 
-    public DAG parser(File file, String name) throws FileNotFoundException, XMLStreamException {
-        DAG<String> D = new DAG<>();
+    public DAG parser(File file, String name) throws IOException, XMLStreamException {
+        DAG<String> D = new DAG<>(name);
         D.add(null, "1.1");
         // Variables to make sure whether a element
         // in the xml is being accessed or not
         // if false that means elements is
         // not been used currently , if true the element or the
         // tag is being used currently
-        fileName = node = parent = child = children = false;
+        fileName = node = parent = child = children = current = false;
 
         // Instance of the class which helps on reading tags
         XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -111,6 +112,14 @@ public class stax_parser {
                         System.out.println(cur_Ver + cur_Par);
                         node = true;
                     }
+                    if (element.getName().toString().equalsIgnoreCase("current") && fileName) {
+                        System.out.println("Start of current: " + attribute);
+                        //this.setVersion(attribute);
+                        this.addData("Version: " + attribute);
+                        System.out.println("Attribute: " + attribute);
+                        D.currentVersion = attribute;
+                        node = true;
+                    }
                 }
                 if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
                     System.out.println("Start of parent:");
@@ -124,6 +133,7 @@ public class stax_parser {
                     System.out.println("Start of child:");
                     child = true;
                 }
+
 
             }
 

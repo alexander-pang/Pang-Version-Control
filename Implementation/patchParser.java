@@ -18,11 +18,11 @@ So, the driver will have to recursively call this for each node it needs to get 
 
 public class patchParser
 {
-    public static void main(String[] args) throws FileNotFoundException, XMLStreamException {
+    /*public static void main(String[] args) throws FileNotFoundException, XMLStreamException {
         patchParser p = new patchParser("file.txt", "asdf");
         System.out.println("FINAL RESULT:\n" + p.getData());
 
-    }
+    }*/
     private static boolean diffFile, FileName;
     private String data = "";
 

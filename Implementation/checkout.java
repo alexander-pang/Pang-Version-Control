@@ -69,8 +69,10 @@ public class checkout {
             for (Object ch : point.getChildren()) {
                 Node child = (Node) ch;
                 if (D.DFS(version, child) != null) {
-                    System.out.println("checking child: " + child.getElem());
+                    System.out.println("found version: " + D.DFS(version,child).getElem());
+                    System.out.println("setting toversion: " + child.getElem());
                     toVersion = (String)child.getElem();
+                    System.out.println("to version"+toVersion);
                     //return;
                 }
             }
@@ -104,13 +106,14 @@ public class checkout {
                 Process p = r.exec("patch temp.txt current.patch  "); // Here we execute the command
                 p.waitFor();
 
-                if (point.getChildren().size() > 1) {
+                /*if (point.getChildren().size() > 1) {
                     for (Object ch : point.getChildren()) {
                         Node child = (Node) ch;
                         if (D.DFS(version, child) != null) {
-                            System.out.println("checking child: " + child.getElem());
+                            System.out.println("seting point to child: " + child.getElem());
                             point = child;
-                            //return;
+                            //System.out.println("Set child point = " + point.getElem());
+                            return;
                         }
                     }
                     point = point.getParent();
@@ -126,7 +129,8 @@ public class checkout {
                 } else {
                     point = point.getParent();
                     System.out.println("Set main point = " + point.getElem() );
-                }
+                }*/
+                point = D.find(toVersion);
 
             } catch (Exception e) {
                 System.out.println(e);

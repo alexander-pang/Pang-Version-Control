@@ -65,6 +65,7 @@ public class DAG<T extends Comparable<T>> {
                             return;
                         }
                     }
+                    System.out.println("find(parent).addChild(find(newVersion));\n" + parent + " : " + newVersion);
                     find(parent).addChild(find(newVersion));
                 } else {
                     find(parent).newChild(newVersion);

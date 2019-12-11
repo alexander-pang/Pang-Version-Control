@@ -13,7 +13,7 @@ public class checkout {
         this.version = version;
         this.D = D;
         point = this.D.getTail();
-        System.out.println("Working Directory = " + System.getProperty("user.dir"));
+        //System.out.println("Working Directory = " + System.getProperty("user.dir"));
         //Runtime.getRuntime().exec("cp " + fileName + "_last.txt " + "temp.txt").waitFor();
         File source = new File(fileName.split("\\.")[0] + "_last." + fileName.split("\\.")[1]);
         File dest = new File("temp.txt");

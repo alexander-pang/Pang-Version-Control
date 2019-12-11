@@ -25,24 +25,29 @@ public class staxMaker {
         pw.println("<Node Version =\"" + version.getElem() + "\">");
         pw.println("<Parent>" + version.getParent().getElem() + "</Parent>");
         String branch = "F";
-        if (version.getIsBranch()){
-            branch = "T";}
+        if (version.getIsBranch()) {
+            branch = "T";
+        }
         pw.println("<isBranch>" + branch + "</isBranch>");
         pw.println("<Children>");
-        for (Object child:version.getChildren()){
-            Node c = (Node)child;
-            pw.println("<Child>" + c.getElem() + "</Child>");
-            System.out.println("CHILD: " + c.getElem());
-            System.out.println("Its parent: " + c.getParent().getElem());
+        if (version.getChildren().size() >0) {
+            for (Object child : version.getChildren()) {
+                Node c = (Node) child;
+                pw.println("<Child>" + c.getElem() + "</Child>");
+                System.out.println("SELF: " + version.getElem());
+                System.out.println("CHILD: " + c.getElem());
+                System.out.println("Its parent: " + c.getParent().getElem());
+            }
         }
         pw.println("</Children>");
         pw.println("</Node>");
         pw.close();
         bw.close();
         fw.close();
-        for (Object child: version.getChildren()) {
+        for (Object child : version.getChildren()) {
             dfsWrite((Node) child);
-        }}
+        }
+    }
     public void write() throws IOException {
         File f = new File(this.file.split("\\.")[0] + ".xml");
         Node cur = this.D.find("1.1");

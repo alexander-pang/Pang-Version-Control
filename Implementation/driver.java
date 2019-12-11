@@ -88,15 +88,85 @@ public class driver {
             this.D.currentVersion = version;
         }
         if (args[0].equals("merge")) {
-            Object filename = args[1];
-            Object version = args[2];
+            String file = args[1];
+            String version1 = args[2];
+            String version2 = args[3];
+            System.out.println("finding: " + version1);
+            checkout c = new checkout(D, file, version1);
+            System.out.println("Point: " + c.point.getElem() + " - Target: " + version1 );
+            while(!c.point.getElem().equals(version1)) {
+                c.generate();
+                System.out.println("Point: " + c.point.getElem() + " - Target: " + version1 );
+            }            File source = new File("temp.txt");
+            File dest = new File("a.txt");
+            FileChannel sourceChannel = null;
+            FileChannel destChannel = null;
+            try {
+                sourceChannel = new FileInputStream(source).getChannel();
+                destChannel = new FileOutputStream(dest).getChannel();
+                destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            } finally {
+                sourceChannel.close();
+                destChannel.close();
+            }
+            System.out.println("finding" + version2);
+
+
+            checkout e = new checkout(D, file, version2);
+            System.out.println("Point: " + e.point.getElem() + " - Target: " + version2 );
+            while(!e.point.getElem().equals(version2)) {
+                e.generate();
+                System.out.println("Point: " + e.point.getElem() + " - Target: " + version2 );
+            }            source = new File("temp.txt");
+            dest = new File("b.txt");
+            sourceChannel = null;
+            destChannel = null;
+            try {
+                sourceChannel = new FileInputStream(source).getChannel();
+                destChannel = new FileOutputStream(dest).getChannel();
+                destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
+            } finally {
+                sourceChannel.close();
+                destChannel.close();
+            }
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec("sdiff -l -w 400 a.txt b.txt  "); // Here we execute the command
+            p.waitFor();
+            BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line = "";
+            String output = "";// Would like to grap all the lines and save them in a single string called
+            // output.
+            while ((line = b.readLine()) != null) {
+                System.out.println(line);
+                output = output + line + "\n";
+            }
+            b.close();
+            // Here we write the string containing all the output appeared on the terminal to a file called c.patch
+            BufferedWriter writer = null;
+            writer = new BufferedWriter(new FileWriter("c.txt"));
+            writer.write(output);
+            writer.close();
+            new merge();
+            String mergeTo;
+            String other;
+            if (version1.split("\\.").length < version2.split("\\.").length){
+                mergeTo = version1;
+                other = version2;
+            }else{
+                mergeTo = version2;
+                other = version1;
+            }
+            //String cur = D.currentVersion;
+            D.currentVersion = mergeTo;
+            commit(args);
+            //D.currentVersion = cur;
+            D.add(other, mergeTo);
             //call merge with args
         }
         String filename = args[1];
+        D.printGraphEdges();
         staxMaker s = new staxMaker(filename,this.D);
         s.write();
-
-
     }
 
     public void commit(String[] args) throws IOException, XMLStreamException, InterruptedException {
@@ -155,7 +225,7 @@ public class driver {
 
             writer.close();
             write(D.currentVersion, filename);
-            this.setCurrentVersion(version);
+            D.currentVersion = version;
         }
         else {
             String version = this.D.calcVersion(D.find(D.currentVersion));

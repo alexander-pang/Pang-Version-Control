@@ -264,6 +264,27 @@ public class DAG<T extends Comparable<T>> {
             }
         }
     }
+
+    public void printBranches(Node head){
+        ArrayList queue = new ArrayList();
+        Node cur = head;
+        System.out.println("branch: " + head.getElem());
+        while(cur.getChildren().size()>0){
+            //queue.add(cur.getChildren().get(0));
+            Node ni = (Node)cur.getChildren().get(0);
+            System.out.println(ni.getElem());
+            if(cur.getChildren().size()>1){
+                for(int i = 1;i<cur.getChildren().size();i++){
+                    queue.add(cur.getChildren().get(i));
+
+                }
+            }
+            cur = (Node)cur.getChildren().get(0);
+        }
+        for(Object child:queue){
+            printBranches((Node)child);
+        }
+    }
     ///////////////////////////////////////////////////////////////////////////////
 
 

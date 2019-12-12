@@ -26,11 +26,43 @@ public class driver {
     }
 
     public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
+        System.out.println("Command line argument number is: "+args.length);
+        System.out.println("Command line arguments are:");
+        String[] sArray = new String[4];
+
+        for(int i = 0;i<args.length;i++) {
+            if (i == 0){
+                sArray[0] = args[0];
+            } else if (args[i].equals("-rev")) {
+                i++;
+                if (sArray[2] == null) {
+                    sArray[2] = args[i];
+                } else {
+                    sArray[3] = args[i];
+                }
+
+            } else if (args[i].equals("-f")) {
+                i++;
+                sArray[1] = args[i];
+            } else if (args[i].equals("-m")) {
+                i++;
+            } else if (args[i].equals("-list")){
+                i++;
+                sArray[1] = args[i];
+            }
+            System.out.println(args[i]);
+        }
+        for(int i = 0; i<sArray.length;i++){
+            System.out.println(sArray[i]);
+        }
+
+
         //DAG dig = new DAG();
         //System.out.println("This is empty");
         //dig.printGraphEdges();
         //System.out.println("end...");
-        driver dr = new driver(args);
+        driver dr = new driver(sArray);
+
         /*System.out.println("*******");
         dr.getDag().printGraphEdges();
         System.out.println("*******");*/
@@ -39,8 +71,9 @@ public class driver {
         System.out.println("Current: " + dr.getDag().currentVersion);
         dr.getDag().printGraphEdges();
         System.out.println("Current Version: " + dr.getCurrentVersion());
-        dr.drive(args);
+        dr.drive(sArray);
         System.out.println("Current Version: " + dr.getCurrentVersion());
+
     }
 
     public void makeDag(String[] args) throws IOException, XMLStreamException {
@@ -61,6 +94,9 @@ public class driver {
         if (args[0].equals("commit")) {
             //call commit
             commit(args);
+        }
+        if(args[0].equals("branch")){
+            D.printBranches(D.getSentinel().getChildren().get(0));
         }
         if (args[0].equals("checkout")) {
             System.out.println("running it");
@@ -171,9 +207,11 @@ public class driver {
 
     public void commit(String[] args) throws IOException, XMLStreamException, InterruptedException {
         System.out.println(D.currentVersion);
+        System.out.println(args.toString());
         if (D.currentVersion == null){
             // System.out.println("running it");
             String filename = args[1];
+            System.out.println(filename);
             String version = "1.1";
             D.add(null, version);
             FileWriter fw = new FileWriter("temp.txt");

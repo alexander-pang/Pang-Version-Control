@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class merge {
-	public merge() throws IOException {
+	public merge(String fileName) throws IOException {
 		File file = new File("c.txt");
 		List<String> readText = Files.readAllLines(Paths.get("c.txt"));
 
@@ -51,15 +51,11 @@ public class merge {
 			} else if (al.size() == 1) {
 				real.add(al.get(0));
 			}
-			//for (int i = 0; i < tokensVal.length; i++)
-			//	System.out.println(tokensVal[i]);
-			//	String input = in.readLine();
-			//	System.out.println(input);
 		}
 
-		File f = new File("temp.txt");
+		File f = new File(fileName);
 		f.delete();
-		FileWriter fw = new FileWriter("temp.txt", true); // true for appending option
+		FileWriter fw = new FileWriter(fileName, true); // true for appending option
 		BufferedWriter bw = new BufferedWriter(fw);
 		PrintWriter pw = new PrintWriter(bw);
 		//pw.println("<?xml version=\"1.0\"?>");

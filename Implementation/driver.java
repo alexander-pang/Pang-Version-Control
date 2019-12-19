@@ -182,7 +182,7 @@ public class driver {
             writer = new BufferedWriter(new FileWriter("c.txt"));
             writer.write(output);
             writer.close();
-            new merge();
+            new merge(args[1]);
             String mergeTo;
             String other;
             if (version1.split("\\.").length < version2.split("\\.").length){
@@ -196,13 +196,16 @@ public class driver {
             D.currentVersion = mergeTo;
             commit(args);
             //D.currentVersion = cur;
-            D.add(other, mergeTo);
+            D.find(other).addChild(D.find(D.currentVersion));
+            Node something = D.find(other);
+            //D.add(other, D.currentVersion);
             //call merge with args
         }
         String filename = args[1];
         D.printGraphEdges();
         staxMaker s = new staxMaker(filename,this.D);
         s.write();
+
     }
 
     public void commit(String[] args) throws IOException, XMLStreamException, InterruptedException {
@@ -301,6 +304,7 @@ public class driver {
                 this.setCurrentVersion(version);
 
             } else {
+                System.out.println("Adding a new tail");
                 // System.out.println("running it");
                 String filename = args[1];
                 checkout c = new checkout(D, filename, D.currentVersion);

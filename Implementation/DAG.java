@@ -75,7 +75,11 @@ public class DAG<T extends Comparable<T>> {
                 }
             }
             print(find(newVersion));
-            if (find(parent) != null && find(parent).getChildren().size() > 1){
+
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!! ADD THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if (find(newVersion).getParent() != null && find(newVersion).getParent().getChildren().size() > 1){
                 find(newVersion).setIsBranch(true);
             }
         }

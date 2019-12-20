@@ -42,12 +42,12 @@ public class checkout {
 
 
     public void generate() throws IOException, XMLStreamException {
-            // Runs the command line to overwrite file with latest (fileName_last.txt)
-            //System.out.println("Run command");
-            //System.setProperty("user.dir", System.getProperty("user.dir") + "/Implementation");
+        // Runs the command line to overwrite file with latest (fileName_last.txt)
+        //System.out.println("Run command");
+        //System.setProperty("user.dir", System.getProperty("user.dir") + "/Implementation");
         //System.out.println("Point: " + point.getElem() + " - Target: " + version );
-            //BufferedReader br = new BufferedReader(new FileReader(fileName.split("\\.")[0] + "_last." + fileName.split("\\.")[1]));
-            //String line;
+        //BufferedReader br = new BufferedReader(new FileReader(fileName.split("\\.")[0] + "_last." + fileName.split("\\.")[1]));
+        //String line;
             /*System.out.println("\nNow printing " + fileName.split("\\.")[0] + "_last." + fileName.split("\\.")[1]);
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
@@ -62,9 +62,9 @@ public class checkout {
             while ((line = z.readLine()) != null) {
                 System.out.println(line);
             }*/
-            System.out.println("\nPoint: " + point.getElem());
-            // parser.getData() is the patch file for the version
-            String toVersion = (String)point.getParent().getElem();
+        System.out.println("\nPoint: " + point.getElem());
+        // parser.getData() is the patch file for the version
+        String toVersion = (String)point.getParent().getElem();
         if (point.getChildren().size() > 1) {
             for (Object ch : point.getChildren()) {
                 Node child = (Node) ch;
@@ -85,26 +85,26 @@ public class checkout {
             }
         }
         patchParser parser = new patchParser(fileName, toVersion);
-            try {
-                // Write the patch data to temp patch file
-                FileWriter fw = new FileWriter("current.patch");
-                BufferedWriter bw = new BufferedWriter(fw);
-                PrintWriter pw = new PrintWriter(bw);
-                //System.out.println("\n The new data: \n" + parser.getData());
-                pw.print(parser.getData());
-                pw.flush();
+        try {
+            // Write the patch data to temp patch file
+            FileWriter fw = new FileWriter("current.patch");
+            BufferedWriter bw = new BufferedWriter(fw);
+            PrintWriter pw = new PrintWriter(bw);
+            //System.out.println("\n The new data: \n" + parser.getData());
+            pw.print(parser.getData());
+            pw.flush();
 
-                pw.close();
-                bw.close();
-                fw.close();
+            pw.close();
+            bw.close();
+            fw.close();
 
-                // Command line to apply patches then change point to next node
-                //Process p =
-                System.out.println("Applying patch: " + toVersion + " now on temp.txt...");
-                //Runtime.getRuntime().exec("patch temp.txt current.patch").waitFor();
-                Runtime r = Runtime.getRuntime();
-                Process p = r.exec("patch temp.txt current.patch  "); // Here we execute the command
-                p.waitFor();
+            // Command line to apply patches then change point to next node
+            //Process p =
+            System.out.println("Applying patch: " + toVersion + " now on temp.txt...");
+            //Runtime.getRuntime().exec("patch temp.txt current.patch").waitFor();
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec("patch temp.txt current.patch  "); // Here we execute the command
+            p.waitFor();
 
                 /*if (point.getChildren().size() > 1) {
                     for (Object ch : point.getChildren()) {
@@ -130,13 +130,13 @@ public class checkout {
                     point = point.getParent();
                     System.out.println("Set main point = " + point.getElem() );
                 }*/
-                point = D.find(toVersion);
+            point = D.find(toVersion);
 
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
-            System.out.println("Successful patch writes...");
+        System.out.println("Successful patch writes...");
 
             /*try {
                 // attach a file to FileWriter
@@ -148,15 +148,5 @@ public class checkout {
                 fw.close();
             }catch(Exception e){System.out.println(e);}
             System.out.println("Success...");*/
-
-
-
     }
-
-    // write the content in file
-    // Accept a string
-
-
-
-
 }

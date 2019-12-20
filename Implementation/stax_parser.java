@@ -157,6 +157,13 @@ public class stax_parser {
                     if(cur_Ver.equals("1.1")){
                         D.add(null, cur_Ver);
                     } else D.add(cur_Par, cur_Ver);
+
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!!!!!!!!!!!!!!!! ADD THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                    System.out.println("\n######## Graph after adding " + cur_Ver + " to " + cur_Par + "##########");
+                    D.printGraphEdges();
+                    System.out.println("#######################################");
                 }
                 if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
                     System.out.println("End of parent:");
@@ -181,7 +188,8 @@ public class stax_parser {
                     if (child) {
                         if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
                             System.out.println("\tCHILD!!!!*******" + element.getData() + "*******");
-                            this.addData("Child: " + element.getData());
+                            D.add(cur_Ver, element.getData());
+                            this.addData("Add Parent: " + cur_Ver + " Child: " + element.getData());
                             //return;
                         }
                     } else {

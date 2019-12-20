@@ -1,8 +1,10 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class staxMaker {
     private String file;
     private DAG D;
+    private ArrayList L;
 
     /*public static void main(String[] args) throws IOException {
         DAG<String> D = new DAG<>();
@@ -14,33 +16,37 @@ public class staxMaker {
         s.write();
     }*/
 
-    public staxMaker(String file, DAG D) throws IOException {
+    public staxMaker(String file, DAG D) {
         this.file = file;
         this.D = D;
+        this.L = new ArrayList();
     }
     public void dfsWrite(Node version) throws IOException {
         FileWriter fw = new FileWriter(this.file.split("\\.")[0] + ".xml", true); // true for appending option
         BufferedWriter bw = new BufferedWriter(fw);
         PrintWriter pw = new PrintWriter(bw);
-        pw.println("<Node Version =\"" + version.getElem() + "\">");
-        pw.println("<Parent>" + version.getParent().getElem() + "</Parent>");
-        String branch = "F";
-        if (version.getIsBranch()) {
-            branch = "T";
-        }
-        pw.println("<isBranch>" + branch + "</isBranch>");
-        pw.println("<Children>");
-        if (version.getChildren().size() >0) {
-            for (Object child : version.getChildren()) {
-                Node c = (Node) child;
-                pw.println("<Child>" + c.getElem() + "</Child>");
-                System.out.println("SELF: " + version.getElem());
-                System.out.println("CHILD: " + c.getElem());
-                System.out.println("Its parent: " + c.getParent().getElem());
+        if (!L.contains(version.getElem())){
+            pw.println("<Node Version =\"" + version.getElem() + "\">");
+            pw.println("<Parent>" + version.getParent().getElem() + "</Parent>");
+            String branch = "F";
+            if (version.getIsBranch()) {
+                branch = "T";
             }
+            pw.println("<isBranch>" + branch + "</isBranch>");
+            pw.println("<Children>");
+            if (version.getChildren().size() > 0) {
+                for (Object child : version.getChildren()) {
+                    Node c = (Node) child;
+                    pw.println("<Child>" + c.getElem() + "</Child>");
+                    System.out.println("SELF: " + version.getElem());
+                    System.out.println("CHILD: " + c.getElem());
+                    System.out.println("Its parent: " + c.getParent().getElem());
+                }
+            }
+            pw.println("</Children>");
+            pw.println("</Node>");
+            L.add(version.getElem());
         }
-        pw.println("</Children>");
-        pw.println("</Node>");
         pw.close();
         bw.close();
         fw.close();

@@ -27,6 +27,8 @@ public class staxMaker {
         PrintWriter pw = new PrintWriter(bw);
         if (!L.contains(version.getElem())){
             pw.println("<Node Version =\"" + version.getElem() + "\">");
+            pw.println("<BrName>" + version.getBrName() + "</BrName>");
+            pw.println("<Message>" + version.getMessage() + "</Message>");
             pw.println("<Parent>" + version.getParent().getElem() + "</Parent>");
             String branch = "F";
             if (version.getIsBranch()) {

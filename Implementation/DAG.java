@@ -67,6 +67,7 @@ public class DAG<T extends Comparable<T>> {
                     }
                     System.out.println("find(parent).addChild(find(newVersion));\n" + parent + " : " + newVersion);
                     find(parent).addChild(find(newVersion));
+                    //find(newVersion).setBrName((String)find(newVersion).getElem());
                 } else {
                     find(parent).newChild(newVersion);
                     if (newVersion.toString().split("\\.").length == 2) {
@@ -74,6 +75,7 @@ public class DAG<T extends Comparable<T>> {
                     }
                 }
             }
+            System.out.println("BRANCH NAME OF: " + find(newVersion).getElem() +  " = " + find(newVersion).getBrName());
             print(find(newVersion));
 
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -184,6 +186,22 @@ public class DAG<T extends Comparable<T>> {
         return null;
     }
 
+    public Node<T> findWBr(String brName, Node<T> current) {
+        if (this.sentinel.getChildren().size() == 0) {
+            return null;
+        }
+        if ((current != null) && (current.getBrName() != null) && (current.getBrName().equals(brName))) {
+            return current;
+        }
+        if (current.getChildren().size() != 0) {
+            for (Node<T> child : current.getChildren()) {
+                Node<T> temp = findWBr(brName, child);
+                if (temp != null) return temp;
+            }
+        }
+        return null;
+    }
+
     public void print_children(Node<T> n){
         System.out.println("Children: ");
         for (Node<T> child: n.getChildren()) {
@@ -272,11 +290,15 @@ public class DAG<T extends Comparable<T>> {
     public void printBranches(Node head){
         ArrayList queue = new ArrayList();
         Node cur = head;
-        System.out.println("branch: " + head.getElem());
+        System.out.println("###### Branch Head ######");
+        System.out.println("Head revision number: " + head.getElem());
+        System.out.println("Head branch name: "+ head.getBrName());
         while(cur.getChildren().size()>0){
             //queue.add(cur.getChildren().get(0));
             Node ni = (Node)cur.getChildren().get(0);
-            System.out.println(ni.getElem());
+            System.out.println("Member: ");
+            System.out.println("revision number: " + ni.getElem());
+            System.out.println("branch name: "+ ni.getBrName());
             if(cur.getChildren().size()>1){
                 for(int i = 1;i<cur.getChildren().size();i++){
                     queue.add(cur.getChildren().get(i));

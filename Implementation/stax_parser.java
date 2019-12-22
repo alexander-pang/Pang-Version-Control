@@ -13,9 +13,9 @@ import javax.xml.stream.events.*;
 
 public class stax_parser {
 
-    private static boolean fileName, current, node, parent, child, children;
+    private static boolean fileName, current, node, brname, parent, child, children, message;
     private String data, file, version;
-    private String cur_Par,cur_Ver = "";
+    private String cur_Par,cur_Ver,cur_Mes,cur_BrN = "";
 
     public stax_parser(String name) throws FileNotFoundException, XMLStreamException {
         //System.out.println("VERSION: " + version);
@@ -52,7 +52,7 @@ public class stax_parser {
         // if false that means elements is
         // not been used currently , if true the element or the
         // tag is being used currently
-        fileName = node = parent = child = children = current = false;
+        fileName = node = brname =parent = child = children = current = message = false;
 
         // Instance of the class which helps on reading tags
         XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -120,10 +120,19 @@ public class stax_parser {
                         D.currentVersion = attribute;
                         node = true;
                     }
+
                 }
                 if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
                     System.out.println("Start of parent:");
                     parent = true;
+                }
+                if (element.getName().toString().equalsIgnoreCase("BrName") && fileName) {
+                    System.out.println("Start of brname:");
+                    brname = true;
+                }
+                if (element.getName().toString().equalsIgnoreCase("Message") && fileName) {
+                    System.out.println("Start of Message:");
+                    message = true;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Children") && fileName) {
                     System.out.println("Start of children:");
@@ -156,7 +165,13 @@ public class stax_parser {
                     //System.out.println("THIS IS CUR_PAR: " + cur_Par + ": " + cur_Par.getClass());
                     if(cur_Ver.equals("1.1")){
                         D.add(null, cur_Ver);
-                    } else D.add(cur_Par, cur_Ver);
+                        D.find(cur_Ver).setMessage(cur_Mes);
+                        D.find(cur_Ver).setBrName(cur_BrN);
+                    } else {
+                        D.add(cur_Par, cur_Ver);
+                        D.find(cur_Ver).setMessage(cur_Mes);
+                        D.find(cur_Ver).setBrName(cur_BrN);
+                    }
 
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //!!!!!!!!!!!!!!!!! ADD THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -165,9 +180,18 @@ public class stax_parser {
                     D.printGraphEdges();
                     System.out.println("#######################################");
                 }
+
+                if (element.getName().toString().equalsIgnoreCase("BrName") && fileName) {
+                    System.out.println("End of BRN: " + element.getName());
+                    brname = false;
+                }
                 if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
                     System.out.println("End of parent:");
                     parent = false;
+                }
+                if (element.getName().toString().equalsIgnoreCase("Message") && fileName) {
+                    System.out.println("End of Message:");
+                    message = false;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Children") && fileName) {
                     System.out.println("End of children:");
@@ -202,7 +226,28 @@ public class stax_parser {
                                 System.out.println(cur_Ver + cur_Par);
                                 //return;
                             }
-                        } /*else if (children) {
+                        }
+                        if (message) {
+                            if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                                System.out.println("\tMessage!!!!***" + element.getData() + "***");
+                                this.addData("Message: " + element.getData());
+                                // Add the parent to our tracking
+                                cur_Mes = element.getData();
+                                System.out.println(cur_Mes);
+                                //return;
+                            }
+                        }
+                        if (brname) {
+                            if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
+                                System.out.println("\tBrName!!!!***" + element.getData() + "***");
+                                this.addData("BrName: " + element.getData());
+                                // Add the parent to our tracking
+                                cur_BrN = element.getData();
+                                System.out.println(cur_BrN);
+                                //return;
+                            }
+                        }
+                        /*else if (children) {
                             if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
                                 System.out.println("\tCHILDREN!!!!*****" + element.getData() + "*****");
                                 this.addData(element.getData());

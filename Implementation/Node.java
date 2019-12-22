@@ -5,12 +5,17 @@ public class Node<T extends Comparable<T>> {
     private ArrayList<Node<T>> children;
     private Node<T> parent;
     private Boolean isBranch;
+    private String brName;
+    private String message;
 
     public Node() {
         this.elem = null;
         this.children = new ArrayList<>();
         this.parent = null;
         this.isBranch = false;
+        this.brName = null;
+        this.message = null;
+
     }
 
     public Node(T elem, Node<T> parent) {
@@ -18,7 +23,8 @@ public class Node<T extends Comparable<T>> {
         this.children = new ArrayList<>();
         this.parent = parent;
         this.isBranch = false;
-
+        this.brName = null;
+        this.message = null;
     }
 
     ///// DO NOT EDIT THE ABOVE.
@@ -29,7 +35,8 @@ public class Node<T extends Comparable<T>> {
         this.children = n.getChildren();
         this.parent = n.getParent();
         this.isBranch = n.getIsBranch();
-
+        this.brName = n.getBrName();
+        this.message = n.message;
     }
 
     public ArrayList<Node<T>> getChildren() {
@@ -48,7 +55,14 @@ public class Node<T extends Comparable<T>> {
     }
 
     public Boolean getIsBranch(){return this.isBranch;}
-    public void setIsBranch(Boolean isBranch){this.isBranch = isBranch;}
+
+    public void setIsBranch(Boolean isBranch){ this.isBranch = isBranch; }
+
+    public String getBrName() { return this.brName; }
+    public void setBrName(String name) { this.brName = name; }
+
+    public String getMessage() { return this.message; }
+    public void setMessage(String m) { this.message = m; }
 
     public void newChild(T new_Data){
         Node<T> new_Node = new Node<>(new_Data, this);

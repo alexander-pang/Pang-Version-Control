@@ -103,43 +103,43 @@ public class stax_parser {
                         fileName = true;
                     }
                     if (element.getName().toString().equalsIgnoreCase("Node") && fileName) {
-                        System.out.println("Start of version: " + attribute);
+                        //System.out.println("Start of version: " + attribute);
                         //this.setVersion(attribute);
                         this.addData("Version: " + attribute);
                         cur_Par = cur_Ver = null;
                         cur_Ver = attribute;
-                        System.out.println("Attribute: " + attribute);
-                        System.out.println(cur_Ver + cur_Par);
+                        //System.out.println("Attribute: " + attribute);
+                        //System.out.println(cur_Ver + cur_Par);
                         node = true;
                     }
                     if (element.getName().toString().equalsIgnoreCase("current") && fileName) {
-                        System.out.println("Start of current: " + attribute);
+                        //System.out.println("Start of current: " + attribute);
                         //this.setVersion(attribute);
                         this.addData("Version: " + attribute);
-                        System.out.println("Attribute: " + attribute);
+                        //System.out.println("Attribute: " + attribute);
                         D.currentVersion = attribute;
                         node = true;
                     }
 
                 }
                 if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
-                    System.out.println("Start of parent:");
+                    //System.out.println("Start of parent:");
                     parent = true;
                 }
                 if (element.getName().toString().equalsIgnoreCase("BrName") && fileName) {
-                    System.out.println("Start of brname:");
+                    //System.out.println("Start of brname:");
                     brname = true;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Message") && fileName) {
-                    System.out.println("Start of Message:");
+                    //System.out.println("Start of Message:");
                     message = true;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Children") && fileName) {
-                    System.out.println("Start of children:");
+                    //System.out.println("Start of children:");
                     children = true;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Child") && fileName) {
-                    System.out.println("Start of child:");
+                    //System.out.println("Start of child:");
                     child = true;
                 }
 
@@ -154,14 +154,14 @@ public class stax_parser {
                 // If the tag matches then the boolean of that tag is
                 // set to be false.
                 if (element.getName().toString().equalsIgnoreCase("FileName") && fileName) {
-                    System.out.println("End of file: " + element.getName());
+                    //System.out.println("End of file: " + element.getName());
                     fileName = false;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Node") && fileName) {
-                    System.out.println("End of version: " + element.getName());
+                    //System.out.println("End of version: " + element.getName());
                     node = false;
                     // If end of a version, add the node created to our DAG
-                    System.out.println(cur_Ver + cur_Par);
+                    //System.out.println(cur_Ver + cur_Par);
                     //System.out.println("THIS IS CUR_PAR: " + cur_Par + ": " + cur_Par.getClass());
                     if(cur_Ver.equals("1.1")){
                         D.add(null, cur_Ver);
@@ -176,29 +176,29 @@ public class stax_parser {
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //!!!!!!!!!!!!!!!!! ADD THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!
                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                    System.out.println("\n######## Graph after adding " + cur_Ver + " to " + cur_Par + "##########");
-                    D.printGraphEdges();
-                    System.out.println("#######################################");
+                    //System.out.println("\n######## Graph after adding " + cur_Ver + " to " + cur_Par + "##########");
+                    //D.printGraphEdges();
+                    //System.out.println("#######################################");
                 }
 
                 if (element.getName().toString().equalsIgnoreCase("BrName") && fileName) {
-                    System.out.println("End of BRN: " + element.getName());
+                    //System.out.println("End of BRN: " + element.getName());
                     brname = false;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Parent") && fileName) {
-                    System.out.println("End of parent:");
+                    //System.out.println("End of parent:");
                     parent = false;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Message") && fileName) {
-                    System.out.println("End of Message:");
+                    //System.out.println("End of Message:");
                     message = false;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Children") && fileName) {
-                    System.out.println("End of children:");
+                    //System.out.println("End of children:");
                     children = false;
                 }
                 if (element.getName().toString().equalsIgnoreCase("Child") && fileName) {
-                    System.out.println("End of child:");
+                    //System.out.println("End of child:");
                     child = false;
                 }
             }
@@ -211,7 +211,7 @@ public class stax_parser {
                 if (fileName) {
                     if (child) {
                         if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
-                            System.out.println("\tCHILD!!!!*******" + element.getData() + "*******");
+                            //System.out.println("\tCHILD!!!!*******" + element.getData() + "*******");
                             D.add(cur_Ver, element.getData());
                             this.addData("Add Parent: " + cur_Ver + " Child: " + element.getData());
                             //return;
@@ -219,31 +219,31 @@ public class stax_parser {
                     } else {
                         if (parent) {
                             if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
-                                System.out.println("\tPARENT!!!!***" + element.getData() + "***");
+                                //System.out.println("\tPARENT!!!!***" + element.getData() + "***");
                                 this.addData("Parent: " + element.getData());
                                 // Add the parent to our tracking
                                 cur_Par = element.getData();
-                                System.out.println(cur_Ver + cur_Par);
+                                //System.out.println(cur_Ver + cur_Par);
                                 //return;
                             }
                         }
                         if (message) {
                             if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
-                                System.out.println("\tMessage!!!!***" + element.getData() + "***");
+                                //System.out.println("\tMessage!!!!***" + element.getData() + "***");
                                 this.addData("Message: " + element.getData());
                                 // Add the parent to our tracking
                                 cur_Mes = element.getData();
-                                System.out.println(cur_Mes);
+                                //System.out.println(cur_Mes);
                                 //return;
                             }
                         }
                         if (brname) {
                             if (!element.getData().replaceAll("[\\n\\t ]", "").equals("")) {
-                                System.out.println("\tBrName!!!!***" + element.getData() + "***");
+                                //System.out.println("\tBrName!!!!***" + element.getData() + "***");
                                 this.addData("BrName: " + element.getData());
                                 // Add the parent to our tracking
                                 cur_BrN = element.getData();
-                                System.out.println(cur_BrN);
+                                //System.out.println(cur_BrN);
                                 //return;
                             }
                         }

@@ -65,7 +65,7 @@ public class DAG<T extends Comparable<T>> {
                             return;
                         }
                     }
-                    System.out.println("find(parent).addChild(find(newVersion));\n" + parent + " : " + newVersion);
+                    //System.out.println("find(parent).addChild(find(newVersion));\n" + parent + " : " + newVersion);
                     find(parent).addChild(find(newVersion));
                     //find(newVersion).setBrName((String)find(newVersion).getElem());
                 } else {
@@ -75,8 +75,8 @@ public class DAG<T extends Comparable<T>> {
                     }
                 }
             }
-            System.out.println("BRANCH NAME OF: " + find(newVersion).getElem() +  " = " + find(newVersion).getBrName());
-            print(find(newVersion));
+            //System.out.println("BRANCH NAME OF: " + find(newVersion).getElem() +  " = " + find(newVersion).getBrName());
+            //print(find(newVersion));
 
             //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //!!!!!!!!!! ADD THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -301,8 +301,10 @@ public class DAG<T extends Comparable<T>> {
             System.out.println("branch name: "+ ni.getBrName());
             if(cur.getChildren().size()>1){
                 for(int i = 1;i<cur.getChildren().size();i++){
-                    queue.add(cur.getChildren().get(i));
-
+                    Node temp = (Node)cur.getChildren().get(i);
+                    if(temp.getParent().getElem().equals(cur.getElem())){
+                        queue.add(cur.getChildren().get(i));
+                    }
                 }
             }
             cur = (Node)cur.getChildren().get(0);

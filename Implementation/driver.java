@@ -27,8 +27,8 @@ public class driver {
     }
 
     public static void main(String[] args) throws IOException, XMLStreamException, InterruptedException {
-        System.out.println("Command line argument number is: "+args.length);
-        System.out.println("Command line arguments are:");
+        //System.out.println("Command line argument number is: "+args.length);
+        //System.out.println("Command line arguments are:");
         String[] sArray = new String[6];
 
         for(int i = 0;i<args.length;i++) {
@@ -63,10 +63,10 @@ public class driver {
                 i++;
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                 String str = String.format("Message: ");
-                System.out.println(str.trim());
+                //System.out.println(str.trim());
                 String input = in.readLine();
                 sArray[4] = input;
-                System.out.println(input);
+                //System.out.println(input);
             } else if (args[i].equals("-list")){
                 i++;
                 sArray[1] = args[i];
@@ -74,7 +74,7 @@ public class driver {
             //System.out.println(args[i]);
         }
         for(int i = 0; i<sArray.length;i++){
-            System.out.println(sArray[i]);
+            //System.out.println(sArray[i]);
         }
 
         //DAG dig = new DAG();
@@ -88,9 +88,9 @@ public class driver {
         System.out.println("*******");*/
 
         //dr.setCurrentVersion(dr.getDag().getTail().getElem());
-        System.out.println("Current: " + dr.getDag().currentVersion);
+        //System.out.println("Current: " + dr.getDag().currentVersion);
         dr.getDag().printGraphEdges();
-        System.out.println("Current Version: " + dr.getCurrentVersion());
+        //System.out.println("Current Version: " + dr.getCurrentVersion());
         dr.drive(sArray);
         System.out.println("Current Version: " + dr.getCurrentVersion());
 
@@ -101,17 +101,27 @@ public class driver {
         String root = args[1].split("\\.")[0];
         File xmlFile = new File(root + ".xml");
         if (xmlFile.exists()) {
-            System.out.println("YES!!!");
+            //System.out.println("YES!!!");
             stax_parser sp = new stax_parser(args[1]);
             this.D = sp.parser(xmlFile, args[1]);
         }
         else this.D = new DAG<>(args[1]);
-        System.out.println("NO!!!");
+        //System.out.println("NO!!!");
     }
-    public void printDiff(String args) throws IOException, InterruptedException {
-        String root = args.split("\\.")[0];
+    public void printDiff(String[] args) throws IOException, InterruptedException, XMLStreamException {
+        //String root = args[1].split("\\.")[0];
+        String version = D.currentVersion;
+        //System.out.println("Checkout version -- should be revision number!!!!!!");
+        //System.out.println(version);
+        checkout c = new checkout(D, args[1], version);
+        //System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
+        while(!c.point.getElem().equals(version)) {
+            c.generate();
+            //System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
+        }
         Runtime r = Runtime.getRuntime();
-        Process p = r.exec("diff -u " + args + " " + root + "_last.txt " ); // Here we execute the command
+
+        Process p = r.exec("diff -u " + args[1] + " " + "temp.txt " ); // Here we execute the command
         p.waitFor();
         BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = "";
@@ -125,12 +135,12 @@ public class driver {
     }
 
     public void drive(String[] args) throws InterruptedException, XMLStreamException, IOException {
-        System.out.println(args[0]);
+        //System.out.println(args[0]);
         if (args[0].equals("commit")) {
             commit(args);
         }
         if (args[0].equals("diff")){
-            printDiff(args[1]);
+            printDiff(args);
         }
         if(args[0].equals("branch")){
             D.printBranches(D.getSentinel().getChildren().get(0));
@@ -163,12 +173,12 @@ public class driver {
     }
 
     public void commit(String[] args) throws IOException, XMLStreamException, InterruptedException {
-        System.out.println(D.currentVersion);
-        System.out.println(args.toString());
+        //System.out.println(D.currentVersion);
+        //System.out.println(args.toString());
         if (D.currentVersion == null){
             // System.out.println("running it");
             String filename = args[1];
-            System.out.println(filename);
+            //System.out.println(filename);
             String version = "1.1";
             D.add(null, version);
             // set the commit message
@@ -211,7 +221,7 @@ public class driver {
             String output = "";// Would like to grap all the lines and save them in a single string called
             // output.
             while ((line = b.readLine()) != null) {
-                System.out.println(line);
+                //System.out.println(line);
                 output = output + line + "\n";
             }
             b.close();
@@ -233,7 +243,7 @@ public class driver {
                 String filename = args[1];
                 checkout c = new checkout(D, filename, D.currentVersion);
                 while(!c.point.getElem().equals(D.currentVersion)) {
-                    System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
+                    //System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
                     c.generate();
                 }
                 Runtime r = Runtime.getRuntime();
@@ -245,7 +255,7 @@ public class driver {
                 String output = "";// Would like to grap all the lines and save them in a single string called
                 // output.
                 while ((line = b.readLine()) != null) {
-                    System.out.println(line);
+                    //System.out.println(line);
                     output = output + line + "\n";
                 }
                 b.close();
@@ -255,7 +265,7 @@ public class driver {
                 BufferedWriter writer = null;
                 writer = new BufferedWriter(new FileWriter("current.patch"));
                 writer.write(output);
-                System.out.println(version + " " + D.currentVersion);
+                //System.out.println(version + " " + D.currentVersion);
                 writer.close();
                 write(version, filename);
                 D.add(D.currentVersion, version);
@@ -266,12 +276,12 @@ public class driver {
                 this.setCurrentVersion(version);
 
             } else {
-                System.out.println("Adding a new tail");
+                //System.out.println("Adding a new tail");
                 // System.out.println("running it");
                 String filename = args[1];
                 checkout c = new checkout(D, filename, D.currentVersion);
                 while(!c.point.getElem().equals(D.currentVersion)) {
-                    System.out.println("Point: " + c.point.getElem() + " - Target: " + D.currentVersion );
+                    //System.out.println("Point: " + c.point.getElem() + " - Target: " + D.currentVersion );
                     c.generate();
                 }
                 File source = new File("temp.txt");
@@ -309,14 +319,14 @@ public class driver {
                     String output = "";// Would like to grap all the lines and save them in a single string called
                     // output.
                     while ((line = b.readLine()) != null) {
-                        System.out.println(line);
+                        //System.out.println(line);
                         output = output + line + "\n";
                     }
                     b.close();
 
                     // Here we write the string containing all the output appeared on the terminal to a file called c.patch
                     //String version = this.D.calcVersion(D.find(D.currentVersion));
-                    System.out.println(version + " " + D.currentVersion);
+                    //System.out.println(version + " " + D.currentVersion);
                     BufferedWriter writer = null;
                     writer = new BufferedWriter(new FileWriter("current.patch"));
                     writer.write(output);
@@ -333,8 +343,8 @@ public class driver {
             }
         }
         String version = this.D.calcVersion(D.find(D.currentVersion));
-        System.out.println(version + " " + D.currentVersion);
-        System.out.println("VERSION SPLIT: " + version.split("\\.").length);
+        //System.out.println(version + " " + D.currentVersion);
+        //System.out.println("VERSION SPLIT: " + version.split("\\.").length);
         if (version.split("\\.").length== 2){
             File source = new File(args[1]);
             File dest = new File(args[1].split("\\.")[0] + "_last." + args[1].split("\\.")[1]);
@@ -353,30 +363,30 @@ public class driver {
 
         // set the branch name
         // if our parameter was branch name
-        System.out.println(args[2]);
+        //System.out.println(args[2]);
         if (!(D.search(args[2]))) {
             D.find(D.currentVersion).setBrName(args[2]);
-            System.out.println("This is our branch name~~~~~~~~~~~~");
-            System.out.println(D.find(D.currentVersion).getBrName());
+            //System.out.println("This is our branch name~~~~~~~~~~~~");
+            //System.out.println(D.find(D.currentVersion).getBrName());
         }
 
     }
 
     public void checkOut(String[] args) throws IOException, XMLStreamException {
-        System.out.println("running it");
+        //System.out.println("running it");
         String filename = args[1];
         String version = args[2];
         if ((!D.search(args[2])) && ((D.findWBr(args[2],D.getSentinel()) != null))) {
             //System.out.println(D.findWBr(args[2]).getElem());
             version = (String) D.findWBr(args[2],D.getSentinel()).getElem();
         }
-        System.out.println("Checkout version -- should be revision number!!!!!!");
-        System.out.println(version);
+        //System.out.println("Checkout version -- should be revision number!!!!!!");
+        //System.out.println(version);
         checkout c = new checkout(D, filename, version);
-        System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
+        //System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
         while(!c.point.getElem().equals(version)) {
             c.generate();
-            System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
+            //System.out.println("Point: " + c.point.getElem() + " - Target: " + version );
         }
         File source = new File("temp.txt");
         File dest = new File(filename);
@@ -406,12 +416,12 @@ public class driver {
             //System.out.println(D.findWBr(args[2]).getElem());
             version2 = (String) D.findWBr(args[3],D.getSentinel()).getElem();
         }
-        System.out.println("finding: " + version1);
+        //System.out.println("finding: " + version1);
         checkout c = new checkout(D, file, version1);
-        System.out.println("Point: " + c.point.getElem() + " - Target: " + version1 );
+        //System.out.println("Point: " + c.point.getElem() + " - Target: " + version1 );
         while(!c.point.getElem().equals(version1)) {
             c.generate();
-            System.out.println("Point: " + c.point.getElem() + " - Target: " + version1 );
+            //System.out.println("Point: " + c.point.getElem() + " - Target: " + version1 );
         }            File source = new File("temp.txt");
         File dest = new File("a.txt");
         FileChannel sourceChannel = null;
@@ -424,13 +434,13 @@ public class driver {
             sourceChannel.close();
             destChannel.close();
         }
-        System.out.println("finding" + version2);
+        //System.out.println("finding" + version2);
 
         checkout e = new checkout(D, file, version2);
-        System.out.println("Point: " + e.point.getElem() + " - Target: " + version2 );
+        //System.out.println("Point: " + e.point.getElem() + " - Target: " + version2 );
         while(!e.point.getElem().equals(version2)) {
             e.generate();
-            System.out.println("Point: " + e.point.getElem() + " - Target: " + version2 );
+            //System.out.println("Point: " + e.point.getElem() + " - Target: " + version2 );
         }            source = new File("temp.txt");
         dest = new File("b.txt");
         sourceChannel = null;
@@ -451,7 +461,7 @@ public class driver {
         String output = "";// Would like to grap all the lines and save them in a single string called
         // output.
         while ((line = b.readLine()) != null) {
-            System.out.println(line);
+            //System.out.println(line);
             output = output + line + "\n";
         }
         b.close();
@@ -467,18 +477,34 @@ public class driver {
             mergeTo = version1;
             other = version2;
         }else{
-            mergeTo = version2;
-            other = version1;
+            if (version1.split("\\.").length > version2.split("\\.").length){
+                mergeTo = version2;
+                other = version1;
+            } else if(Integer.parseInt(version1.split("\\.")[version1.split("\\.").length-1]) < Integer.parseInt(version2.split("\\.")[version2.split("\\.").length-1])){
+                mergeTo = version2;
+                other = version1;
+            }
+            else{
+                mergeTo = version1;
+                other = version2;
+            }
         }
         //String cur = D.currentVersion;
         D.currentVersion = mergeTo;
-        commit(args);
+        //System.out.println("********CURRENT VERSION = " + mergeTo + " ***********");
+        //System.out.println("********OTHER = " + other + " ***********");
+        String[] sa = new String[6];
+        sa[0] = args[0];
+        sa[1] = args[1];
+        sa[4] = args[4];
+        commit(sa);
         //D.currentVersion = cur;
         D.find(other).addChild(D.find(D.currentVersion));
-        Node something = D.find(other);
+        //Node something = D.find(other);
         //D.add(other, D.currentVersion);
         //call merge with args
     }
+
 
     public void rename(String[] args) {
         String version = args[2];
@@ -486,8 +512,8 @@ public class driver {
             //System.out.println(D.findWBr(args[2]).getElem());
             version = (String) D.findWBr(args[2],D.getSentinel()).getElem();
         }
-        System.out.println("Checkout version -- should be revision number!!!!!!");
-        System.out.println(version);
+        //System.out.println("Checkout version -- should be revision number!!!!!!");
+        //System.out.println(version);
 
         if (D.findWBr(args[3],D.getSentinel()) != null) {
             System.out.println("Newname, " + args[3] + ", already exists. Cannot rename with this name.");

@@ -62,17 +62,17 @@ public class checkout {
             while ((line = z.readLine()) != null) {
                 System.out.println(line);
             }*/
-        System.out.println("\nPoint: " + point.getElem());
+        //System.out.println("\nPoint: " + point.getElem());
         // parser.getData() is the patch file for the version
         String toVersion = (String)point.getParent().getElem();
         if (point.getChildren().size() > 1) {
             for (Object ch : point.getChildren()) {
                 Node child = (Node) ch;
                 if (D.DFS(version, child) != null) {
-                    System.out.println("found version: " + D.DFS(version,child).getElem());
-                    System.out.println("setting toversion: " + child.getElem());
+                    //System.out.println("found version: " + D.DFS(version,child).getElem());
+                    //System.out.println("setting toversion: " + child.getElem());
                     toVersion = (String)child.getElem();
-                    System.out.println("to version"+toVersion);
+                    //System.out.println("to version"+toVersion);
                     //return;
                 }
             }
@@ -100,7 +100,7 @@ public class checkout {
 
             // Command line to apply patches then change point to next node
             //Process p =
-            System.out.println("Applying patch: " + toVersion + " now on temp.txt...");
+            //System.out.println("Applying patch: " + toVersion + " now on temp.txt...");
             //Runtime.getRuntime().exec("patch temp.txt current.patch").waitFor();
             Runtime r = Runtime.getRuntime();
             Process p = r.exec("patch temp.txt current.patch  "); // Here we execute the command
@@ -136,7 +136,7 @@ public class checkout {
             System.out.println(e);
         }
 
-        System.out.println("Successful patch writes...");
+        //System.out.println("Successful patch writes...");
 
             /*try {
                 // attach a file to FileWriter

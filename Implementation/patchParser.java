@@ -93,11 +93,11 @@ public class patchParser
                 if (!element.getName().toString().equalsIgnoreCase("start")) {
                     String attribute = element.getAttributes().next().getValue();
                     if (element.getName().toString().equalsIgnoreCase("superSecretString") && attribute.equals(version)) {
-                        System.out.println("Heres the diff " + attribute);
+                        //System.out.println("Heres the diff " + attribute);
                         diffFile = true;
                     }
                     if (element.getName().toString().equalsIgnoreCase("FileName") && attribute.equals(fileName)) {
-                        System.out.println("Heres the file " + attribute);
+                        //System.out.println("Heres the file " + attribute);
                         FileName = true;
                     }
                 }

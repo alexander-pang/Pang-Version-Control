@@ -66,7 +66,7 @@ public class Node<T extends Comparable<T>> {
 
     public void newChild(T new_Data){
         Node<T> new_Node = new Node<>(new_Data, this);
-        System.out.println(new_Node);
+        //System.out.println(new_Node);
         this.children.add(new_Node);
     }
     public void addChild(Node<T> child){
@@ -78,11 +78,11 @@ public class Node<T extends Comparable<T>> {
             if (data.equals(child.getElem())){
                 child.setParent(null);
                 this.children.remove(child);
-                System.out.println("Removed: " + child.getElem());
+                //System.out.println("Removed: " + child.getElem());
                 return;
             }
         }
-        System.out.println("Not found");
+        //System.out.println("Not found");
     }
 
    /* @Override

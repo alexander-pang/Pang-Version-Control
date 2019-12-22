@@ -40,9 +40,9 @@ public class staxMaker {
                 for (Object child : version.getChildren()) {
                     Node c = (Node) child;
                     pw.println("<Child>" + c.getElem() + "</Child>");
-                    System.out.println("SELF: " + version.getElem());
-                    System.out.println("CHILD: " + c.getElem());
-                    System.out.println("Its parent: " + c.getParent().getElem());
+                    //System.out.println("SELF: " + version.getElem());
+                    //System.out.println("CHILD: " + c.getElem());
+                    //System.out.println("Its parent: " + c.getParent().getElem());
                 }
             }
             pw.println("</Children>");
@@ -73,7 +73,7 @@ public class staxMaker {
         fw = new FileWriter(this.file.split("\\.")[0] + ".xml", true); // true for appending option
         bw = new BufferedWriter(fw);
         pw = new PrintWriter(bw);
-        System.out.println(cur.getElem() + " successfully appended into file");
+        //System.out.println(cur.getElem() + " successfully appended into file");
         pw.flush();
         cur = cur;
         pw.println("</FileName>");

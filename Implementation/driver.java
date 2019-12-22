@@ -88,12 +88,30 @@ public class driver {
         else this.D = new DAG<>(args[1]);
         System.out.println("NO!!!");
     }
+    public void printDiff(String args) throws IOException, InterruptedException {
+        String root = args.split("\\.")[0];
+        Runtime r = Runtime.getRuntime();
+        Process p = r.exec("diff -u " + args + " " + root + "_last.txt " ); // Here we execute the command
+        p.waitFor();
+        BufferedReader b = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        String line = "";
+        String output = "";// Would like to grap all the lines and save them in a single string called
+        // output.
+        while ((line = b.readLine()) != null) {
+            System.out.println(line);
+            output = output + line + "\n";
+        }
+        b.close();
+    }
 
     public void drive(String[] args) throws InterruptedException, XMLStreamException, IOException {
         System.out.println(args[0]);
         if (args[0].equals("commit")) {
             //call commit
             commit(args);
+        }
+        if (args[0].equals("diff")){
+            printDiff(args[1]);
         }
         if(args[0].equals("branch")){
             D.printBranches(D.getSentinel().getChildren().get(0));

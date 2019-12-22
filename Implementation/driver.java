@@ -1,6 +1,7 @@
 import javax.xml.stream.XMLStreamException;
 import java.io.*;
 import java.nio.channels.FileChannel;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.SplittableRandom;
 
@@ -8,7 +9,7 @@ public class driver {
     private DAG<String> D;
     //private String currentVersion;
     //private String fileName;
-
+    public driver(){ }
     public driver(String[] args) throws IOException, XMLStreamException {
         makeDag(args);
     }
@@ -32,6 +33,11 @@ public class driver {
 
         for(int i = 0;i<args.length;i++) {
             if (i == 0){
+                if (args[0].equals("help")) {
+                    driver d = new driver();
+                    d.printCommands();
+                    return;
+                }
                 sArray[0] = args[0];
             } else if (args[i].equals("-rev")) {
                 i++;
@@ -144,6 +150,16 @@ public class driver {
         staxMaker s = new staxMaker(filename,this.D);
         s.write();
 
+    }
+
+    public void printCommands(){
+        System.out.println("Key: -f = filename : -m = option if commit message is wanted : -rev = revision number : -br = branch name : () = optional");
+        System.out.println("\nCommiting: java -jar oosd-group-project.jar commit -f fileName (-br branchName) (-m)");
+        System.out.println("\nCheckout: java -jar oosd-group-project.jar checkout [-rev revisionNum | -br branchName] -f fileName");
+        System.out.println("\nMerge: java -jar oosd-group-project.jar merge f file [-rev revision | -br branchName] [-rev revision | -br branchName]  (-m)");
+        System.out.println("\nRename: java -jar oosd-group-project.jar rename -f fileName [-br oldBranchName | -rev revisionNum] -br newBranchName");
+        System.out.println("\nPrint Diff: java -jar oosd-group-project.jar diff -f fileName");
+        System.out.println("\nPrint Branches: java -jar oosd-group-project.jar branch -list fileName");
     }
 
     public void commit(String[] args) throws IOException, XMLStreamException, InterruptedException {

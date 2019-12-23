@@ -18,7 +18,7 @@ current.patch
 temp.txt
 temp2.txt
 
-For example, if our filename.filetype is a.txt, .a.txt, a.xml, a_last.txt, current.patch, temp.txt and temp2.txt is created by our codes.
+For example, if our filename.filetype is A.txt, .A.txt, A.xml, A_last.txt, current.patch, temp.txt and temp2.txt is created by our codes.
 
 e)
 

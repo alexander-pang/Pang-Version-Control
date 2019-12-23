@@ -277,12 +277,12 @@ public class DAG<T extends Comparable<T>> {
         for(Node<T> someNode: graph_set) {
             //print edge to parent edge first
             if(someNode.getParent() == this.sentinel) {
-                System.out.println("PARENT of "+someNode.getElem().toString()+" is  root/sentinel");
+                //System.out.println("PARENT of "+someNode.getElem().toString()+" is  root/sentinel");
             }
-            else System.out.println("PARENT of "+ someNode.getElem().toString() +" is "+ someNode.getParent().getElem().toString() );
+            else //System.out.println("PARENT of "+ someNode.getElem().toString() +" is "+ someNode.getParent().getElem().toString() );
             //print children edges
             for(Node<T> c: someNode.getChildren()) {
-                System.out.println("("+someNode.getElem().toString()+", "+c.getElem().toString()+")");
+                //System.out.println("("+someNode.getElem().toString()+", "+c.getElem().toString()+")");
             }
         }
     }

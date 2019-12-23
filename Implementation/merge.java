@@ -41,7 +41,7 @@ public class merge {
 			al.removeIf(""::equals);
 			if (al.size() == 2) {
 				String str = String.format("Press 1 to choose: %s or Press 2 to choose: %s", al.get(0), al.get(1));
-				//System.out.println(str.trim());
+				System.out.println(str.trim());
 				String input = in.readLine();
 				if (input.equals("1")) {
 					real.add(al.get(0));

@@ -62,8 +62,8 @@ public class driver {
             } else if (args[i].equals("-m")) {
                 i++;
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-                String str = String.format("Message: ");
-                //System.out.println(str.trim());
+                String str = String.format("Please type in your commit message: ");
+                System.out.println(str.trim());
                 String input = in.readLine();
                 sArray[4] = input;
                 //System.out.println(input);
@@ -127,6 +127,7 @@ public class driver {
         String line = "";
         String output = "";// Would like to grap all the lines and save them in a single string called
         // output.
+        System.out.println("Printing Diff of local vs version " + D.currentVersion);
         while ((line = b.readLine()) != null) {
             System.out.println(line);
             output = output + line + "\n";
@@ -156,7 +157,7 @@ public class driver {
         }
 
         String filename = args[1];
-        D.printGraphEdges();
+        //D.printGraphEdges();
         staxMaker s = new staxMaker(filename,this.D);
         s.write();
 
@@ -364,12 +365,17 @@ public class driver {
         // set the branch name
         // if our parameter was branch name
         //System.out.println(args[2]);
-        if (!(D.search(args[2]))) {
-            D.find(D.currentVersion).setBrName(args[2]);
-            //System.out.println("This is our branch name~~~~~~~~~~~~");
-            //System.out.println(D.find(D.currentVersion).getBrName());
-        }
 
+
+        if (!D.search(args[2])) {
+            if (D.findWBr(args[2],D.getSentinel()) != null) {
+                System.out.println(args[2]+ "ExistS. Cannot set given branch name.");
+            } else {
+                D.find(D.currentVersion).setBrName(args[2]);
+                System.out.println("Set new branch name.");
+                System.out.println(D.find(D.currentVersion).getBrName());
+            }
+        }
     }
 
     public void checkOut(String[] args) throws IOException, XMLStreamException {

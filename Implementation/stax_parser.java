@@ -97,7 +97,7 @@ public class stax_parser {
                 if (!element.getName().toString().equalsIgnoreCase("start") && element.getAttributes().hasNext()) {
                     String attribute = element.getAttributes().next().getValue();
                     if (element.getName().toString().equalsIgnoreCase("FileName") && attribute.equals(name)) {
-                        System.out.println("Start of file: " + attribute);
+                        //System.out.println("Start of file: " + attribute);
                         //System.out.println(element);
                         this.addData("File: " + attribute);
                         fileName = true;

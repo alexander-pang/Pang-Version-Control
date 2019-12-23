@@ -22,9 +22,7 @@ For example, if our filename.filetype is a.txt, .a.txt, a.xml, a_last.txt, curre
 
 e)
 
-Suppose our filename.filetype is A.txt
-
-
+******* Note: For our command line, the order of options does not matter! *******
 
 java -jar oosd-group-project.jar commit -f A.txt -br firstBr    	        // commit command line - will make 1.1 with branch name firstBr
 

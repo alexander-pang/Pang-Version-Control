@@ -44,7 +44,7 @@ java -jar oosd-group-project.jar merge -f A.txt -rev 1.1.1 -rev 1.3	    	// merg
 
 java -jar oosd-group-project.jar rename -f A.txt -rev 1.3 -br thirdBr   	// rename command line - will give a branch name, thirdB, third to 1.3
 
-java -jar oosd-group-project.jar rename -f A.txt -br thirdBr -br firstBr	//  rename command line - won\'92t work because branch name, firstBr, already exists
+java -jar oosd-group-project.jar rename -f A.txt -br thirdBr -br firstBr	//  rename command line - won't work because branch name, firstBr, already exists
 
 java -jar oosd-group-project.jar rename -f A.txt -br thirdBr -br newThird	// rename command line - will change the branch name of 1.3, thirdBr, to newThird
 
